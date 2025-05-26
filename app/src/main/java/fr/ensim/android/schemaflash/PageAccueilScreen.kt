@@ -1,6 +1,8 @@
 package fr.ensim.android.schemaflash
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -15,6 +17,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
+// --------- Données flashcards ----------
 data class FlashCardData(val imageRes: Int, val title: String)
 
 val flashCards = listOf(
@@ -26,9 +29,52 @@ val flashCards = listOf(
     FlashCardData(R.drawable.os, "Fiche os")
 )
 
+// --------- Page Accueil ----------
 @Composable
 fun PageAccueilScreen(onFabClick: () -> Unit = {}) {
     Scaffold(
+        topBar = {
+            Column {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 30.dp)
+                ) {
+                    // Faux bouton menu (3 traits)
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(4.dp),
+                        modifier = Modifier.padding(end = 12.dp)
+                    ) {
+                        repeat(3) {
+                            Box(
+                                modifier = Modifier
+                                    .size(width = 30.dp, height = 4.dp)
+                                    .background(Color.Black)
+                            )
+                        }
+                    }
+
+                    // Titre avec effet contour simulé
+                    Box {
+                        Text(
+                            text = "Schema Flash",
+                            fontSize = 30.sp,
+                            color = Color.Black,
+                            modifier = Modifier.offset(x = 1.dp, y = 1.dp)
+                        )
+                        Text(
+                            text = "Schema Flash",
+                            fontSize = 30.sp,
+                            color = Color.Blue
+                        )
+                    }
+                }
+
+                // Ligne noire de séparation
+                Divider(color = Color.Black, thickness = 1.dp)
+            }
+        },
         floatingActionButton = {
             FloatingActionButton(onClick = onFabClick) {
                 Icon(
@@ -64,6 +110,8 @@ fun PageAccueilScreen(onFabClick: () -> Unit = {}) {
         }
     }
 }
+
+// --------- Fiche individuelle ----------
 @Composable
 fun FlashCard(imageRes: Int, text: String) {
     Card(
@@ -88,34 +136,6 @@ fun FlashCard(imageRes: Int, text: String) {
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
                     .padding(8.dp)
-            )
-        }
-    }
-}
-
-@Composable
-fun PageAccueilScreen(imageRes: Int, text: String) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .aspectRatio(1f),
-        colors = CardDefaults.cardColors(containerColor = Color(0xFFE0F7FA))
-    ) {
-        Column(
-            modifier = Modifier.fillMaxSize().padding(8.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.SpaceBetween
-        ) {
-            Image(
-                painter = painterResource(id = imageRes),
-                contentDescription = null,
-                modifier = Modifier.fillMaxSize(),
-                contentScale = ContentScale.Crop
-            )
-            Text(
-                text = text,
-                fontSize = 16.sp,
-                modifier = Modifier.padding(8.dp)
             )
         }
     }
