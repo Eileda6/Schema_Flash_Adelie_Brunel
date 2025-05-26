@@ -1,3 +1,10 @@
 <resources>
-    <string name="app_name">Schema_Flash</string>
+    <string name="app_name">schemaFlash</string>
+    <string name="fiche_neurone">Fiche neurone</string>
+    <string name="fiche_cell">Fiche cellule</string>
+    <string name="fiche_corps_humain">Fiche corps humain</string>
+    <string name="fiche_coeur">Fiche coeur</string>
+    <string name="fiche_carte_france">Fiche carte france</string>
+    <string name="fiche_os">Fiche os</string>
+
 </resources>

@@ -1,4 +1,4 @@
-package fr.ensim.android.schema_flash
+package fr.ensim.android.schemaflash
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -11,14 +11,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import fr.ensim.android.schema_flash.ui.theme.Schema_FlashTheme
+import fr.ensim.android.schemaflash.ui.theme.SchemaFlashTheme
+import fr.ensim.android.schemaflash.PageAccueilScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            Schema_FlashTheme {
+            SchemaFlashTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Greeting(
                         name = "Android",
@@ -32,16 +33,19 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
+    SchemaFlashTheme {
+        Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+            PageAccueilScreen(
+                onFabClick = {}
+                //modifier = Modifier.padding(innerPadding)
+            )
+        }
+    }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
-    Schema_FlashTheme {
-        Greeting("Android")
-    }
+
 }
+

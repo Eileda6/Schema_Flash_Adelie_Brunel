@@ -19,6 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Schema_Flash"
+rootProject.name = "schemaFlash"
 include(":app")
  

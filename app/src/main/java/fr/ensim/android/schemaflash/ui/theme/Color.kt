@@ -1,4 +1,4 @@
-package fr.ensim.android.schema_flash.ui.theme
+package fr.ensim.android.schemaflash.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

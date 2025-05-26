@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "fr.ensim.android.schema_flash"
+    namespace = "fr.ensim.android.schemaflash"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "fr.ensim.android.schema_flash"
+        applicationId = "fr.ensim.android.schemaflash"
         minSdk = 28
         targetSdk = 35
         versionCode = 1

@@ -1,4 +1,4 @@
-package fr.ensim.android.schema_flash.ui.theme
+package fr.ensim.android.schemaflash.ui.theme
 
 import android.app.Activity
 import android.os.Build
@@ -34,7 +34,7 @@ private val LightColorScheme = lightColorScheme(
 )
 
 @Composable
-fun Schema_FlashTheme(
+fun SchemaFlashTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
     dynamicColor: Boolean = true,

@@ -1,4 +1,4 @@
-package fr.ensim.android.schema_flash
+package fr.ensim.android.schemaflash
 
 import org.junit.Test
 
