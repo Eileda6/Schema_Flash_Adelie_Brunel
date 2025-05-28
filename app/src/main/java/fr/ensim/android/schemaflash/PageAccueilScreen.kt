@@ -1,5 +1,11 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package fr.ensim.android.schemaflash
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -9,6 +15,9 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -17,7 +26,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-// --------- Données flashcards ----------
+// ------------ Données ------------
 data class FlashCardData(val imageRes: Int, val title: String)
 
 val flashCards = listOf(
@@ -29,54 +38,72 @@ val flashCards = listOf(
     FlashCardData(R.drawable.os, "Fiche os")
 )
 
-// --------- Page Accueil ----------
+// ------------ Barre du haut réutilisable ------------
 @Composable
-fun PageAccueilScreen(onFabClick: () -> Unit = {}) {
+fun PageAccueilScreen() {
+    var expanded by remember { mutableStateOf(false) }
+
     Scaffold(
         topBar = {
-            Column {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 30.dp)
-                ) {
-                    // Faux bouton menu (3 traits)
-                    Column(
-                        verticalArrangement = Arrangement.spacedBy(4.dp),
-                        modifier = Modifier.padding(end = 12.dp)
+            TopAppBar(
+                title = {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.fillMaxWidth()
                     ) {
-                        repeat(3) {
-                            Box(
-                                modifier = Modifier
-                                    .size(width = 30.dp, height = 4.dp)
-                                    .background(Color.Black)
+                        Spacer(modifier = Modifier.width(32.dp))
+                        Text(
+                            text = "Schema Flash",
+                            color = Color.Black,
+                            fontSize = 30.sp,
+                            modifier = Modifier
+                                .weight(1f)
+                                .padding(end = 32.dp)
+                        )
+                    }
+                },
+                navigationIcon = {
+                    Box {
+                        IconButton(onClick = { expanded = true }) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.mobile_menu_icon),
+                                contentDescription = "Menu",
+                                modifier = Modifier.size(60.dp)
+                            )
+                        }
+
+                        DropdownMenu(
+                            expanded = expanded,
+                            onDismissRequest = { expanded = false }
+                        ) {
+                            DropdownMenuItem(
+                                text = { Text("Page d'accueil") },
+                                onClick = { expanded = false }
+                            )
+                            DropdownMenuItem(
+                                text = { Text("Une idée d'amélioration ?") },
+                                onClick = { expanded = false }
+                            )
+                            DropdownMenuItem(
+                                text = { Text("Besoin d'aide") },
+                                onClick = { expanded = false }
+                            )
+                            DropdownMenuItem(
+                                text = { Text("À propos de nous") },
+                                onClick = { expanded = false }
                             )
                         }
                     }
-
-                    // Titre avec effet contour simulé
-                    Box {
-                        Text(
-                            text = "Schema Flash",
-                            fontSize = 30.sp,
-                            color = Color.Black,
-                            modifier = Modifier.offset(x = 1.dp, y = 1.dp)
-                        )
-                        Text(
-                            text = "Schema Flash",
-                            fontSize = 30.sp,
-                            color = Color.Blue
-                        )
-                    }
-                }
-
-                // Ligne noire de séparation
-                Divider(color = Color.Black, thickness = 1.dp)
-            }
+                },
+                colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = Color.White),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(88.dp)
+                    .border(1.dp, Color.Black)
+            )
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = onFabClick) {
+            FloatingActionButton(onClick = { /* TODO: action */ }) {
                 Icon(
                     painter = painterResource(id = android.R.drawable.ic_input_add),
                     contentDescription = "Ajouter"
@@ -91,7 +118,7 @@ fun PageAccueilScreen(onFabClick: () -> Unit = {}) {
                 .padding(16.dp)
         ) {
             Text(
-                text = "Bienvenue sur la page d’accueil. Ici tu trouveras toutes tes fiches",
+                text = "Mes fiches",
                 fontSize = 24.sp,
                 modifier = Modifier.padding(bottom = 16.dp)
             )
@@ -111,7 +138,9 @@ fun PageAccueilScreen(onFabClick: () -> Unit = {}) {
     }
 }
 
-// --------- Fiche individuelle ----------
+
+
+// ------------ Carte individuelle ------------
 @Composable
 fun FlashCard(imageRes: Int, text: String) {
     Card(
@@ -120,14 +149,12 @@ fun FlashCard(imageRes: Int, text: String) {
             .aspectRatio(1f),
         elevation = CardDefaults.cardElevation(4.dp)
     ) {
-        Box(
-            modifier = Modifier.fillMaxSize()
-        ) {
+        Box(modifier = Modifier.fillMaxSize()) {
             Image(
                 painter = painterResource(id = imageRes),
                 contentDescription = null,
-                modifier = Modifier.fillMaxSize(),
-                contentScale = ContentScale.Crop
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.fillMaxSize()
             )
             Text(
                 text = text,
@@ -138,5 +165,23 @@ fun FlashCard(imageRes: Int, text: String) {
                     .padding(8.dp)
             )
         }
+    }
+}
+
+@Composable
+fun ImageTestScreen() {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(32.dp)
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.neurone), // remplace par ton image
+            contentDescription = null,
+            modifier = Modifier
+                .fillMaxWidth()
+                .aspectRatio(1f),
+            contentScale = ContentScale.Crop
+        )
     }
 }
