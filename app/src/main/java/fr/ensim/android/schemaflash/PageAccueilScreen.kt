@@ -40,7 +40,7 @@ val flashCards = listOf(
 
 // ------------ Barre du haut réutilisable ------------
 @Composable
-fun PageAccueilScreen() {
+fun PageAccueilScreen(onFabClick: () -> Unit) {
     var expanded by remember { mutableStateOf(false) }
 
     Scaffold(
@@ -71,28 +71,12 @@ fun PageAccueilScreen() {
                                 modifier = Modifier.size(60.dp)
                             )
                         }
-
-                        DropdownMenu(
+                        MenuDeroulant(
                             expanded = expanded,
-                            onDismissRequest = { expanded = false }
-                        ) {
-                            DropdownMenuItem(
-                                text = { Text("Page d'accueil") },
-                                onClick = { expanded = false }
-                            )
-                            DropdownMenuItem(
-                                text = { Text("Une idée d'amélioration ?") },
-                                onClick = { expanded = false }
-                            )
-                            DropdownMenuItem(
-                                text = { Text("Besoin d'aide") },
-                                onClick = { expanded = false }
-                            )
-                            DropdownMenuItem(
-                                text = { Text("À propos de nous") },
-                                onClick = { expanded = false }
-                            )
-                        }
+                            onDismiss = { expanded = false },
+                            onAccueilClick = { /* rien à faire, on est déjà sur accueil */ }
+                        )
+
                     }
                 },
                 colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = Color.White),
@@ -103,7 +87,7 @@ fun PageAccueilScreen() {
             )
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = { /* TODO: action */ }) {
+            FloatingActionButton(onClick = onFabClick) {
                 Icon(
                     painter = painterResource(id = android.R.drawable.ic_input_add),
                     contentDescription = "Ajouter"
@@ -118,7 +102,7 @@ fun PageAccueilScreen() {
                 .padding(16.dp)
         ) {
             Text(
-                text = "Mes fiches",
+                text = "Bienvenue sur la page d’accueil. Ici tu trouveras toutes tes fiches",
                 fontSize = 24.sp,
                 modifier = Modifier.padding(bottom = 16.dp)
             )

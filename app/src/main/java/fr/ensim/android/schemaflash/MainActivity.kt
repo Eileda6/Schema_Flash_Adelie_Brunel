@@ -5,8 +5,9 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import fr.ensim.android.schemaflash.ui.theme.SchemaFlashTheme
 
 class MainActivity : ComponentActivity() {
@@ -15,7 +16,24 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             SchemaFlashTheme {
-                PageAccueilScreen()
+                val navController = rememberNavController()
+
+                NavHost(navController = navController, startDestination = "accueil") {
+                    composable("accueil") {
+                        PageAccueilScreen(
+                            onFabClick = {
+                                navController.navigate("ajouter")
+                            }
+                        )
+                    }
+                    composable("ajouter") {
+                        AjouterFicheScreen(
+                            onRetourAccueil = {
+                                navController.popBackStack() // ← revient à la page précédente (accueil)
+                            }
+                        )
+                    }
+                }
             }
         }
     }
