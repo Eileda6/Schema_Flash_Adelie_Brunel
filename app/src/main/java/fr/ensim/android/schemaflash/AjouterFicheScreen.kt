@@ -12,10 +12,41 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.activity.compose.rememberLauncherForActivityResult
+
+import androidx.activity.result.contract.ActivityResultContracts
+
+import android.app.Activity
+import android.content.Intent
+import android.net.Uri
+import android.provider.MediaStore
+import androidx.activity.result.launch
+import androidx.compose.ui.platform.LocalContext
 
 @Composable
 fun AjouterFicheScreen(onRetourAccueil: () -> Unit) {
     var menuExpanded by remember { mutableStateOf(false) }
+
+    val context = LocalContext.current
+
+    // Launcher pour ouvrir le sélecteur de fichiers
+    val launcherFile = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        uri?.let {
+            // Ici tu peux gérer le fichier choisi
+            println("Fichier sélectionné : $it")
+            // Par exemple, afficher un Toast ou charger le fichier
+        }
+    }
+
+    // Launcher pour ouvrir l'appareil photo et récupérer une photo en Bitmap
+    val launcherCamera = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.TakePicturePreview(),
+        onResult = { bitmap ->
+            // Gère ici le bitmap retourné par la caméra
+        }
+    )
 
     Scaffold(
         topBar = {
@@ -62,10 +93,10 @@ fun AjouterFicheScreen(onRetourAccueil: () -> Unit) {
             // Bouton 1 : Fichier
             Row(verticalAlignment = Alignment.CenterVertically) {
                 IconButton(onClick = {
-                    // Action pour importer un fichier
+                    launcherFile.launch("*/*") // ouvre tous les types de fichiers
                 }) {
                     Icon(
-                        painter = painterResource(id = android.R.drawable.ic_menu_upload), // Choisis une icône adaptée
+                        painter = painterResource(id = android.R.drawable.ic_menu_upload),
                         contentDescription = "Importer fichier",
                         modifier = Modifier.size(32.dp)
                     )
@@ -76,11 +107,10 @@ fun AjouterFicheScreen(onRetourAccueil: () -> Unit) {
 
             Text(text = "OU", fontSize = 16.sp)
 
-
-// Bouton 2 : Appareil photo
+            // Bouton 2 : Appareil photo
             Row(verticalAlignment = Alignment.CenterVertically) {
                 IconButton(onClick = {
-                    // Action pour prendre une photo
+                    launcherCamera.launch() // lance l'appareil photo
                 }) {
                     Icon(
                         painter = painterResource(id = android.R.drawable.ic_menu_camera),
@@ -91,9 +121,6 @@ fun AjouterFicheScreen(onRetourAccueil: () -> Unit) {
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(text = "Appareil photo", fontSize = 18.sp)
             }
-
         }
     }
 }
-
-
