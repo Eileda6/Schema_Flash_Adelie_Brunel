@@ -23,8 +23,13 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 import android.Manifest
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Menu
 import androidx.core.content.ContextCompat
 import androidx.core.content.PermissionChecker
+import fr.ensim.android.schemaflash.ui.theme.Blue1
+import fr.ensim.android.schemaflash.ui.theme.LightBlue
+import fr.ensim.android.schemaflash.ui.theme.White
 
 @Composable
 fun AjouterFicheScreen(
@@ -100,13 +105,18 @@ fun AjouterFicheScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Schema Flash", fontSize = 26.sp) },
+                title = { Text(text = "Schema Flash",
+                    color = Color.White,
+                    fontSize = 30.sp,
+                    modifier = Modifier
+                        .padding(end = 32.dp)) },
                 navigationIcon = {
                     Box {
                         IconButton(onClick = { menuExpanded = true }) {
                             Icon(
-                                painter = painterResource(id = R.drawable.mobile_menu_icon),
-                                contentDescription = "Menu"
+                                imageVector = Icons.Default.Menu, // ou ton propre ImageVector importé
+                                contentDescription = "Menu",
+                                tint = White // ta couleur personnalisée ici
                             )
                         }
 
@@ -120,7 +130,7 @@ fun AjouterFicheScreen(
                         )
                     }
                 },
-                colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = Color.White),
+                colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = LightBlue),
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(88.dp)
@@ -136,7 +146,7 @@ fun AjouterFicheScreen(
             verticalArrangement = Arrangement.spacedBy(24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = "Créer une flashcard à partir de", fontSize = 20.sp)
+            Text(text = "Créer une flashcard à partir de", fontSize = 20.sp, color = Blue1)
 
             // Bouton 1 : Fichier
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -150,10 +160,10 @@ fun AjouterFicheScreen(
                     )
                 }
                 Spacer(modifier = Modifier.width(8.dp))
-                Text(text = "Fichier", fontSize = 18.sp)
+                Text(text = "Fichier", fontSize = 18.sp,color = Blue1)
             }
 
-            Text(text = "OU", fontSize = 16.sp)
+            Text(text = "OU", fontSize = 16.sp,color = Blue1)
 // Bouton 2 : Appareil photo
             Row(verticalAlignment = Alignment.CenterVertically) {
                 IconButton(onClick = {
@@ -170,7 +180,7 @@ fun AjouterFicheScreen(
                     )
                 }
                 Spacer(modifier = Modifier.width(8.dp))
-                Text(text = "Appareil photo", fontSize = 18.sp)
+                Text(text = "Appareil photo", fontSize = 18.sp,color = Blue1)
             }
 
         }

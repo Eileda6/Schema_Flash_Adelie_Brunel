@@ -18,6 +18,8 @@ import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import fr.ensim.android.schemaflash.ui.theme.LightBlue
+import fr.ensim.android.schemaflash.ui.theme.White
 
 @Composable
 fun CreerFicheScreen(imageUri: Uri?, onRetourAccueil: () -> Unit) {
@@ -31,13 +33,18 @@ fun CreerFicheScreen(imageUri: Uri?, onRetourAccueil: () -> Unit) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Créer une fiche", fontSize = 24.sp) },
+                title = { Text(text = "Schema Flash",
+                    color = Color.White,
+                    fontSize = 30.sp,
+                    modifier = Modifier
+                        .padding(end = 32.dp)) },
                 navigationIcon = {
                     Box {
                         IconButton(onClick = { menuExpanded = true }) {
                             Icon(
-                                painter = painterResource(id = R.drawable.mobile_menu_icon),
-                                contentDescription = "Menu"
+                                imageVector = Icons.Default.Menu, // ou ton propre ImageVector importé
+                                contentDescription = "Menu",
+                                tint = White // ta couleur personnalisée ici
                             )
                         }
 
@@ -51,16 +58,36 @@ fun CreerFicheScreen(imageUri: Uri?, onRetourAccueil: () -> Unit) {
                         )
                     }
                 },
-                colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = Color.White)
+                colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = LightBlue)
             )
+        },
+        bottomBar = {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 24.dp, top = 8.dp), // un peu d’espace au-dessus et en-dessous
+                contentAlignment = Alignment.Center
+            ) {
+                Button(
+                    onClick = { onRetourAccueil() },
+                    colors = ButtonDefaults.buttonColors(containerColor = LightBlue),
+                    modifier = Modifier
+                        .widthIn(min = 150.dp, max = 250.dp)  // largeur contrôlée, ni trop large ni trop petite
+                        .height(48.dp)  // hauteur un peu plus grande que le standard
+                ) {
+                    Text("Valider")
+                }
+            }
         }
+
     ) { innerPadding ->
         Column(
             modifier = Modifier
                 .padding(innerPadding)
                 .fillMaxSize()
                 .padding(16.dp)
-        ) {
+        )
+      {
             // 🔘 6 Boutons d’édition
             Row(
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
