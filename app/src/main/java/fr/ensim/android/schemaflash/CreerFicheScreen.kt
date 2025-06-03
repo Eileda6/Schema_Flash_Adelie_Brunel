@@ -16,35 +16,91 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.res.painterResource
 import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.*
 
 @Composable
 fun CreerFicheScreen(imageUri: Uri?, onRetourAccueil: () -> Unit) {
+    if (imageUri == null) {
+        // Afficher une UI d'erreur ou un écran vide
+        Text("Aucune image sélectionnée")
+        return
+    }
+    var menuExpanded by remember { mutableStateOf(false) }
+
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Créer une fiche") },
+                title = { Text("Créer une fiche", fontSize = 24.sp) },
                 navigationIcon = {
-                    IconButton(onClick = onRetourAccueil) {
-                        Icon(painterResource(R.drawable.mobile_menu_icon), contentDescription = "Retour")
+                    Box {
+                        IconButton(onClick = { menuExpanded = true }) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.mobile_menu_icon),
+                                contentDescription = "Menu"
+                            )
+                        }
+
+                        MenuDeroulant(
+                            expanded = menuExpanded,
+                            onDismiss = { menuExpanded = false },
+                            onAccueilClick = {
+                                menuExpanded = false
+                                onRetourAccueil()
+                            }
+                        )
                     }
-                }
+                },
+                colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = Color.White)
             )
         }
-    ) { padding ->
-        Box(
+    ) { innerPadding ->
+        Column(
             modifier = Modifier
-                .padding(padding)
-                .fillMaxSize(),
-            contentAlignment = Alignment.Center
+                .padding(innerPadding)
+                .fillMaxSize()
+                .padding(16.dp)
         ) {
-            imageUri?.let {
-                AsyncImage(
-                    model = it,
-                    contentDescription = null,
-                    modifier = Modifier.fillMaxWidth(0.8f).aspectRatio(1f)
-                )
-            } ?: Text("Aucune image sélectionnée")
+            // 🔘 6 Boutons d’édition
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                IconButton(onClick = { /* undo */ }) {
+                    Icon(Icons.Default.Undo, contentDescription = "Annuler")
+                }
+                IconButton(onClick = { /* redo */ }) {
+                    Icon(Icons.Default.Redo, contentDescription = "Rétablir")
+                }
+                IconButton(onClick = { /* texte */ }) {
+                    Icon(Icons.Default.TextFields, contentDescription = "Zone de texte")
+                }
+                IconButton(onClick = { /* flèche */ }) {
+                    Icon(Icons.Default.ArrowForward, contentDescription = "Flèche")
+                }
+                IconButton(onClick = { /* crop */ }) {
+                    Icon(Icons.Default.Crop, contentDescription = "Rogner")
+                }
+                IconButton(onClick = { /* télécharger */ }) {
+                    Icon(Icons.Default.Download, contentDescription = "Télécharger")
+                }
+            }
+
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // 🖼️ Affichage de l’image
+            AsyncImage(
+                model = imageUri,
+                contentDescription = "Image sélectionnée",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+                    .border(1.dp, Color.Gray)
+            )
         }
     }
 }
+
 
