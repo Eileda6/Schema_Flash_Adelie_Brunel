@@ -9,6 +9,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -31,6 +32,7 @@ import androidx.compose.ui.unit.sp
 import fr.ensim.android.schemaflash.ui.theme.LightBlue
 import fr.ensim.android.schemaflash.ui.theme.White
 import fr.ensim.android.schemaflash.ui.theme.Blue1
+import androidx.compose.material3.Divider
 
 // ------------ Données ------------
 data class FlashCardData(val imageRes: Int, val title: String)
@@ -46,7 +48,8 @@ val flashCards = listOf(
 
 // ------------ Barre du haut réutilisable ------------
 @Composable
-fun PageAccueilScreen(onFabClick: () -> Unit) {
+fun PageAccueilScreen(onFabClick: () -> Unit,
+                      onCardClick: (FlashCardData) -> Unit) {
     var expanded by remember { mutableStateOf(false) }
 
     Scaffold(
@@ -93,7 +96,6 @@ fun PageAccueilScreen(onFabClick: () -> Unit) {
                     .border(1.dp, Color.Black)
 
             )
-            Divider(color = Color.Blue, thickness = 2.dp)
         },
         floatingActionButton = {
             FloatingActionButton(
@@ -116,7 +118,6 @@ fun PageAccueilScreen(onFabClick: () -> Unit) {
                 .padding(16.dp)
         )
         {
-            Divider(color = Color.Blue, thickness = 2.dp)
             Text(
                 text = "Bienvenue sur la page d’accueil. Ici tu trouveras toutes tes fiches",
                 fontSize = 24.sp,
@@ -133,7 +134,11 @@ fun PageAccueilScreen(onFabClick: () -> Unit) {
                 contentPadding = PaddingValues(bottom = 72.dp)
             ) {
                 items(flashCards) { card ->
-                    FlashCard(imageRes = card.imageRes, text = card.title)
+                    FlashCard(
+                        imageRes = card.imageRes,
+                        text = card.title,
+                        onClick = { onCardClick(card) }
+                    )
                 }
             }
         }
@@ -143,21 +148,19 @@ fun PageAccueilScreen(onFabClick: () -> Unit) {
 
 
 // ------------ Carte individuelle ------------
-
 @Composable
-fun FlashCard(imageRes: Int, text: String) {
+fun FlashCard(imageRes: Int, text: String, onClick: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .aspectRatio(1f)
-            // on enlève l’élévation native et on met un shadow custom :
+            .clickable(onClick = onClick) // <-- AJOUTER CE CLICKABLE
             .shadow(
                 elevation = 8.dp,
                 shape = MaterialTheme.shapes.medium,
-                ambientColor = Blue1,  // ta couleur bleu pour l’ombre
-                spotColor = Blue1      // idem
+                ambientColor = Blue1,
+                spotColor = Blue1
             ),
-        // on met elevation à 0 pour ne pas avoir l’ombre native noire
         elevation = CardDefaults.cardElevation(0.dp)
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
@@ -178,6 +181,7 @@ fun FlashCard(imageRes: Int, text: String) {
         }
     }
 }
+
 
 @Composable
 fun ImageTestScreen() {

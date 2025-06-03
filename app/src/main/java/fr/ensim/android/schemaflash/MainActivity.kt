@@ -10,6 +10,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import fr.ensim.android.schemaflash.ui.theme.SchemaFlashTheme
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
 
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.mutableStateOf
@@ -27,7 +29,13 @@ class MainActivity : ComponentActivity() {
 
                 NavHost(navController = navController, startDestination = "accueil") {
                     composable("accueil") {
-                        PageAccueilScreen(onFabClick = { navController.navigate("ajouter") })
+                        PageAccueilScreen(
+                            onFabClick = { navController.navigate("ajouter") },
+                            onCardClick = { flashCard ->
+                                navController.navigate("fiche/${flashCard.title}/${flashCard.imageRes}")
+                            }
+                        )
+
                     }
                     composable("ajouter") {
                         AjouterFicheScreen(
@@ -44,6 +52,26 @@ class MainActivity : ComponentActivity() {
                             onRetourAccueil = { navController.navigate("accueil") }
                         )
                     }
+                    composable(
+                        route = "fiche/{title}/{imageRes}",
+                        arguments = listOf(
+                            navArgument("title") { type = NavType.StringType },
+                            navArgument("imageRes") { type = NavType.IntType }
+                        )
+                    ) { backStackEntry ->
+                        val title = backStackEntry.arguments?.getString("title") ?: ""
+                        val imageRes = backStackEntry.arguments?.getInt("imageRes") ?: 0
+
+                        ApprendreFicheScreen(
+                            title = title,
+                            imageRes = imageRes,
+                            onAccueilClick = { navController.navigate("accueil") }
+                        )
+                    }
+
+
+
+
                 }
 
             }
