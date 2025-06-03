@@ -119,6 +119,11 @@ fun ApprendreFicheScreen(
                             snackbarHostState.showSnackbar(
                                 if (allCorrect) "🎉 Toutes les réponses sont correctes !" else "❌ Certaines réponses sont incorrectes."
                             )
+                            if (allCorrect) {
+                                // Ajoute un petit délai pour que l'utilisateur voie le message
+                                kotlinx.coroutines.delay(1000)
+                                onAccueilClick()
+                            }
                         }
                     },
                     modifier = Modifier.align(Alignment.CenterHorizontally)
