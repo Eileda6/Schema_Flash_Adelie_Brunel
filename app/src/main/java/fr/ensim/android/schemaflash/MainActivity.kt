@@ -1,5 +1,6 @@
 package fr.ensim.android.schemaflash
 
+import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -10,6 +11,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import fr.ensim.android.schemaflash.ui.theme.SchemaFlashTheme
 
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -17,23 +23,29 @@ class MainActivity : ComponentActivity() {
         setContent {
             SchemaFlashTheme {
                 val navController = rememberNavController()
+                var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
 
                 NavHost(navController = navController, startDestination = "accueil") {
                     composable("accueil") {
-                        PageAccueilScreen(
-                            onFabClick = {
-                                navController.navigate("ajouter")
-                            }
-                        )
+                        PageAccueilScreen(onFabClick = { navController.navigate("ajouter") })
                     }
                     composable("ajouter") {
                         AjouterFicheScreen(
-                            onRetourAccueil = {
-                                navController.popBackStack() // ← revient à la page précédente (accueil)
-                            }
+                            onImageSelected = { uri ->
+                                selectedImageUri = uri
+                                navController.navigate("creer")
+                            },
+                            onRetourAccueil = { navController.navigate("accueil") }
+                        )
+                    }
+                    composable("creer") {
+                        CreerFicheScreen(
+                            imageUri = selectedImageUri,
+                            onRetourAccueil = { navController.navigate("accueil") }
                         )
                     }
                 }
+
             }
         }
     }
