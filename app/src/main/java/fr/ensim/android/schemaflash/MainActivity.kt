@@ -6,17 +6,16 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.material3.*
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import fr.ensim.android.schemaflash.ui.theme.SchemaFlashTheme
-import androidx.navigation.NavType
 import androidx.navigation.navArgument
-
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import fr.ensim.android.schemaflash.ui.theme.SchemaFlashTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,11 +31,14 @@ class MainActivity : ComponentActivity() {
                         PageAccueilScreen(
                             onFabClick = { navController.navigate("ajouter") },
                             onCardClick = { flashCard ->
-                                navController.navigate("fiche/${flashCard.title}/${flashCard.imageRes}")
+                                val card = flashCards.find { it.title == flashCard.title }
+                                if (card != null) {
+                                    navController.navigate("fiche/${card.title}/${card.imageRes}")
+                                }
                             }
                         )
-
                     }
+
                     composable("ajouter") {
                         AjouterFicheScreen(
                             onImageSelected = { uri ->
@@ -46,12 +48,14 @@ class MainActivity : ComponentActivity() {
                             onRetourAccueil = { navController.navigate("accueil") }
                         )
                     }
+
                     composable("creer") {
                         CreerFicheScreen(
                             imageUri = selectedImageUri,
                             onRetourAccueil = { navController.navigate("accueil") }
                         )
                     }
+
                     composable(
                         route = "fiche/{title}/{imageRes}",
                         arguments = listOf(
@@ -61,19 +65,16 @@ class MainActivity : ComponentActivity() {
                     ) { backStackEntry ->
                         val title = backStackEntry.arguments?.getString("title") ?: ""
                         val imageRes = backStackEntry.arguments?.getInt("imageRes") ?: 0
+                        val fiche = flashCards.find { it.title == title }
 
                         ApprendreFicheScreen(
                             title = title,
                             imageRes = imageRes,
+                            zones = fiche?.zones ?: emptyList(),
                             onAccueilClick = { navController.navigate("accueil") }
                         )
                     }
-
-
-
-
                 }
-
             }
         }
     }

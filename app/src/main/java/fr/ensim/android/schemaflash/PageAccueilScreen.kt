@@ -35,7 +35,7 @@ import fr.ensim.android.schemaflash.ui.theme.Blue1
 import androidx.compose.material3.Divider
 
 // ------------ Données ------------
-data class FlashCardData(val imageRes: Int, val title: String)
+/*data class FlashCardData(val imageRes: Int, val title: String)
 
 val flashCards = listOf(
     FlashCardData(R.drawable.neurone, "Fiche Neurone"),
@@ -44,7 +44,7 @@ val flashCards = listOf(
     FlashCardData(R.drawable.carte_france, "Fiche carte france"),
     FlashCardData(R.drawable.coeur, "Fiche coeur"),
     FlashCardData(R.drawable.os, "Fiche os")
-)
+)*/
 
 // ------------ Barre du haut réutilisable ------------
 @Composable
