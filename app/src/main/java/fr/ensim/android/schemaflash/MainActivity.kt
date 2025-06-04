@@ -31,9 +31,11 @@ class MainActivity : ComponentActivity() {
                         PageAccueilScreen(
                             onFabClick = { navController.navigate("ajouter") },
                             onCardClick = { flashCard ->
-                                val card = flashCards.find { it.title == flashCard.title }
+                                val card = flashCardList.find { it.title == flashCard.title }
                                 if (card != null) {
-                                    navController.navigate("fiche/${card.title}/${card.imageRes}")
+                                    // Encodage de l'URI pour éviter les erreurs de navigation
+                                    val encodedUri = Uri.encode(card.imageUri)
+                                    navController.navigate("fiche/${card.title}/$encodedUri")
                                 }
                             }
                         )
@@ -57,19 +59,19 @@ class MainActivity : ComponentActivity() {
                     }
 
                     composable(
-                        route = "fiche/{title}/{imageRes}",
+                        route = "fiche/{title}/{imageUri}",
                         arguments = listOf(
                             navArgument("title") { type = NavType.StringType },
-                            navArgument("imageRes") { type = NavType.IntType }
+                            navArgument("imageUri") { type = NavType.StringType }
                         )
                     ) { backStackEntry ->
                         val title = backStackEntry.arguments?.getString("title") ?: ""
-                        val imageRes = backStackEntry.arguments?.getInt("imageRes") ?: 0
-                        val fiche = flashCards.find { it.title == title }
+                        val imageUriStr = backStackEntry.arguments?.getString("imageUri") ?: ""
+                        val fiche = flashCardList.find { it.title == title }
 
                         ApprendreFicheScreen(
                             title = title,
-                            imageRes = imageRes,
+                            imageUri = imageUriStr,
                             zones = fiche?.zones ?: emptyList(),
                             onAccueilClick = { navController.navigate("accueil") }
                         )
