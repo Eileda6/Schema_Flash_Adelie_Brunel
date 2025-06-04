@@ -141,14 +141,6 @@ fun FlashCard(imageUri: String, text: String, onClick: () -> Unit) {
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.Crop
             )
-            Text(
-                text = text,
-                fontSize = 16.sp,
-                color = Color.White,
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .padding(8.dp)
-            )
         }
     }
 }
