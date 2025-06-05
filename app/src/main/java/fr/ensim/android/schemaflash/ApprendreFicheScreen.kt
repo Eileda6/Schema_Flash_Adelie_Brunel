@@ -21,11 +21,17 @@ import fr.ensim.android.schemaflash.ui.theme.LightBlue
 import fr.ensim.android.schemaflash.ui.theme.White
 import kotlinx.coroutines.launch
 
+data class Zone(
+    val label: String,
+    val correctAnswer: String
+)
+
+
 @Composable
 fun ApprendreFicheScreen(
     title: String,
     imageUri: String,
-    zones: List<CompletionZone>,
+    zones: List<Zone>,
     onAccueilClick: () -> Unit
 ) {
     var expanded by remember { mutableStateOf(false) }
@@ -96,14 +102,15 @@ fun ApprendreFicheScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             // Champs pour les zones à compléter
-            zones.forEach { zone ->
-                val value = userInputs[zone.label] ?: ""
-                val isCorrect = value.trim().equals(zone.correctAnswer, ignoreCase = true)
+            zones.forEachIndexed { index, correctAnswer ->
+                val label = (index + 1).toString()
+                val value = userInputs[label] ?: ""
+                val isCorrect = value.trim().equals(correctAnswer.trim(), ignoreCase = true)
 
                 OutlinedTextField(
                     value = value,
-                    onValueChange = { userInputs[zone.label] = it },
-                    label = { Text("Zone ${zone.label}") },
+                    onValueChange = { userInputs[label] = it },
+                    label = { Text("Zone $label") },
                     isError = value.isNotBlank() && !isCorrect,
                     supportingText = {
                         if (value.isNotBlank()) {
@@ -116,13 +123,20 @@ fun ApprendreFicheScreen(
                 )
             }
 
+
+
+
+
             Spacer(modifier = Modifier.height(16.dp))
 
             Button(
                 onClick = {
-                    val allCorrect = zones.all { zone ->
-                        userInputs[zone.label]?.trim()?.equals(zone.correctAnswer, ignoreCase = true) == true
+                    val allCorrect = zones.withIndex().all { (index, correctAnswer) ->
+                        val label = (index + 1).toString()
+                        userInputs[label]?.trim()?.equals(correctAnswer.trim(), ignoreCase = true) == true
                     }
+
+
                     scope.launch {
                         snackbarHostState.showSnackbar(
                             if (allCorrect) "🎉 Toutes les réponses sont correctes !" else "❌ Certaines réponses sont incorrectes."

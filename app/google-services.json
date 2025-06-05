@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "875764476489",
+    "project_id": "schemaflash-cb438",
+    "storage_bucket": "schemaflash-cb438.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:875764476489:android:abcb275b7d060d32bb2d98",
+        "android_client_info": {
+          "package_name": "fr.ensim.android.schemaflash"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDdMMGuLgjCeMS7u_HYsFepMQrPYin6UpU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

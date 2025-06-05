@@ -186,3 +186,35 @@ fun AjouterFicheScreen(
         }
     }
 }
+
+@Composable
+fun MainScreen() {
+    var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
+    var currentScreen by remember { mutableStateOf("ajouter") }
+
+    LaunchedEffect(selectedImageUri, currentScreen) {
+        println("DEBUG - currentScreen: $currentScreen, selectedImageUri: $selectedImageUri")
+    }
+
+    when (currentScreen) {
+        "ajouter" -> AjouterFicheScreen(
+            onImageSelected = { uri ->
+                println("DEBUG - Image sélectionnée: $uri")
+                selectedImageUri = uri
+                currentScreen = "creer"
+            },
+            onRetourAccueil = {
+                // TODO si besoin
+            }
+        )
+
+        "creer" -> CreerFicheScreen(
+            imageUri = selectedImageUri,
+            onRetourAccueil = {
+                println("DEBUG - Retour à AjouterFicheScreen")
+                selectedImageUri = null
+                currentScreen = "ajouter"
+            }
+        )
+    }
+}

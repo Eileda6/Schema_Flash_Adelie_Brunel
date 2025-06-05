@@ -21,4 +21,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "schemaFlash"
 include(":app")
- 
+
+

@@ -16,8 +16,10 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.google.firebase.firestore.FirebaseFirestore
 import fr.ensim.android.schemaflash.ui.theme.LightBlue
 import fr.ensim.android.schemaflash.ui.theme.White
+import fr.ensim.android.schemaflash.flashCardList
 
 @Composable
 fun CreerFicheScreen(
@@ -35,6 +37,8 @@ fun CreerFicheScreen(
     var newZoneLabel by remember { mutableStateOf("") }
     var newZoneAnswer by remember { mutableStateOf("") }
     var showZoneDialog by remember { mutableStateOf(false) }
+
+    val db = FirebaseFirestore.getInstance()
 
     Scaffold(
         topBar = {
@@ -69,20 +73,28 @@ fun CreerFicheScreen(
             ) {
                 Button(
                     onClick = {
-                        flashCardList.add(
-                            FlashCardData(
-                                title = titre.ifBlank { "Sans titre" },
-                                imageUri = imageUri.toString(),
-                                zones = zones
+                        if (imageUri != null) {
+                            uploadImageAndAddFiche(
+                                uri = imageUri,
+                                titre = titre,
+                                zones = zones,
+                                onSuccess = {
+                                    println("Fiche ajoutée avec succès !")
+                                    onRetourAccueil()
+                                },
+                                onError = { message ->
+                                    println("Erreur : $message")
+                                    // Tu peux ici afficher un Snackbar ou Toast pour informer l'utilisateur
+                                }
                             )
-                        )
-                        onRetourAccueil()
+                        }
                     },
                     enabled = imageUri != null,
                     colors = ButtonDefaults.buttonColors(containerColor = LightBlue)
                 ) {
                     Text("Valider")
                 }
+
             }
         }
     ) { innerPadding ->
@@ -124,10 +136,11 @@ fun CreerFicheScreen(
                 contentDescription = "Image sélectionnée",
                 modifier = Modifier
                     .fillMaxWidth()
-                    .weight(1f)
+                    .height(300.dp) // fixe la hauteur pour tester
                     .border(1.dp, Color.Gray),
                 contentScale = ContentScale.Fit
             )
+
 
             Spacer(Modifier.height(12.dp))
 

@@ -2,7 +2,9 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    id("com.google.gms.google-services")
 }
+
 
 android {
     namespace = "fr.ensim.android.schemaflash"
@@ -38,7 +40,6 @@ android {
         compose = true
     }
 }
-
 dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.core.ktx)
@@ -59,11 +60,18 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-    dependencies {
-        implementation(libs.navigation.compose)
-    }
 
+    // Firebase BOM (gère les versions automatiquement)
+    implementation(platform("com.google.firebase:firebase-bom:32.8.0"))
 
+    // Firebase libs (sans version)
+    implementation("com.google.firebase:firebase-firestore-ktx")
+    implementation("com.google.firebase:firebase-storage-ktx")
+    implementation("com.google.firebase:firebase-auth-ktx")
+    implementation("com.google.firebase:firebase-analytics-ktx")
 
+    // UI Navigation
+    implementation(libs.navigation.compose)
 
+    implementation(platform("com.google.firebase:firebase-bom:33.14.0"))
 }

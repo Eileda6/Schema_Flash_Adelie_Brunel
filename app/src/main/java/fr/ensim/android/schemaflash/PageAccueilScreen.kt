@@ -2,10 +2,6 @@
 
 package fr.ensim.android.schemaflash
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -16,9 +12,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -28,8 +22,11 @@ import fr.ensim.android.schemaflash.ui.theme.LightBlue
 import fr.ensim.android.schemaflash.ui.theme.White
 
 @Composable
-fun PageAccueilScreen(onFabClick: () -> Unit,
-                      onCardClick: (FlashCardData) -> Unit) {
+fun PageAccueilScreen(
+    flashCards: List<FlashCardData>,
+    onFabClick: () -> Unit,
+    onCardClick: (FlashCardData) -> Unit
+) {
     var expanded by remember { mutableStateOf(false) }
 
     Scaffold(
@@ -49,28 +46,20 @@ fun PageAccueilScreen(onFabClick: () -> Unit,
                         )
                     }
                 },
-
                 navigationIcon = {
-                    Box {
-                        IconButton(onClick = { expanded = true }) {
-                            Icon(
-                                imageVector = Icons.Default.Menu,
-                                contentDescription = "Menu",
-                                tint = White
-                            )
-                        }
-                        MenuDeroulant(
-                            expanded = expanded,
-                            onDismiss = { expanded = false },
-                            onAccueilClick = { /* déjà sur accueil */ }
+                    IconButton(onClick = { expanded = true }) {
+                        Icon(
+                            imageVector = Icons.Default.Menu,
+                            contentDescription = "Menu",
+                            tint = White
                         )
                     }
+                    // Implémenter MenuDeroulant si nécessaire
                 },
                 colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = LightBlue),
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(88.dp)
-                    .border(1.dp, Color.Black)
             )
         },
         floatingActionButton = {
@@ -106,41 +95,15 @@ fun PageAccueilScreen(onFabClick: () -> Unit,
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
                 contentPadding = PaddingValues(bottom = 72.dp)
             ) {
-                items(flashCardList) { card ->
+                items(flashCards) { card ->
                     FlashCard(
-                        imageUri = card.imageUri,
-                        text = card.title,
+                        imageUri = card.imageUrl,
+                        text = card.titre,
                         onClick = { onCardClick(card) }
                     )
+
                 }
             }
-        }
-    }
-}
-
-
-@Composable
-fun FlashCard(imageUri: String, text: String, onClick: () -> Unit) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .aspectRatio(1f)
-            .clickable(onClick = onClick)
-            .shadow(
-                elevation = 8.dp,
-                shape = MaterialTheme.shapes.medium,
-                ambientColor = Blue1,
-                spotColor = Blue1
-            ),
-        elevation = CardDefaults.cardElevation(0.dp)
-    ) {
-        Box(modifier = Modifier.fillMaxSize()) {
-            AsyncImage(
-                model = imageUri,
-                contentDescription = text,
-                modifier = Modifier.fillMaxSize(),
-                contentScale = ContentScale.Crop
-            )
         }
     }
 }
