@@ -57,5 +57,5 @@ SchemaFlash est une application Android développée en Kotlin avec Jetpack Comp
 
 1. Clone le repo :
 ```bash
-git clone https://github.com/Eileda6/SchemaFlash.git
-cd SchemaFlash
+https://github.com/Eileda6/Schema_Flash_Adelie_Brunel.git
+
