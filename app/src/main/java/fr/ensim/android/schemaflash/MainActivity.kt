@@ -2,6 +2,7 @@ package fr.ensim.android.schemaflash
 
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -37,14 +38,11 @@ class MainActivity : ComponentActivity() {
 
                 LaunchedEffect(Unit) {
                     try {
-                        val snapshot = firestore.collection("flashcards").get().await()
-                        val cards = snapshot.documents.mapNotNull { doc ->
-                            doc.toObject(FlashCardData::class.java)
-                        }
+                        FlashcardRepository.chargerFichesDepuisFirebase()
                         flashCardList.clear()
-                        flashCardList.addAll(cards)
+                        flashCardList.addAll(FlashcardRepository.flashCardList)
                     } catch (e: Exception) {
-                        e.printStackTrace()
+                        Log.e("Firestore", "Erreur de chargement", e)
                     }
                 }
 
@@ -108,7 +106,7 @@ class MainActivity : ComponentActivity() {
                         ApprendreFicheScreen(
                             title = title,
                             imageUri = imageUriStr,
-                            zones = fiche?.zonestexte ?: emptyList(),
+                            zones = fiche?.zonestexte?.map { Zone(label = it.label, correctAnswer = it.correctAnswer) } ?: emptyList(),
                             onAccueilClick = { navController.navigate("accueil") }
                         )
 

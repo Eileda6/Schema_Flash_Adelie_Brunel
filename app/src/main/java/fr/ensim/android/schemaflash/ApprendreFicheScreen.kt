@@ -105,7 +105,7 @@ fun ApprendreFicheScreen(
             zones.forEachIndexed { index, correctAnswer ->
                 val label = (index + 1).toString()
                 val value = userInputs[label] ?: ""
-                val isCorrect = value.trim().equals(correctAnswer.trim(), ignoreCase = true)
+                val isCorrect = value.trim().equals(correctAnswer.correctAnswer.trim(), ignoreCase = true)
 
                 OutlinedTextField(
                     value = value,
@@ -133,8 +133,9 @@ fun ApprendreFicheScreen(
                 onClick = {
                     val allCorrect = zones.withIndex().all { (index, correctAnswer) ->
                         val label = (index + 1).toString()
-                        userInputs[label]?.trim()?.equals(correctAnswer.trim(), ignoreCase = true) == true
+                        userInputs[label]?.trim()?.equals(correctAnswer.correctAnswer.trim(), ignoreCase = true) == true
                     }
+
 
 
                     scope.launch {
